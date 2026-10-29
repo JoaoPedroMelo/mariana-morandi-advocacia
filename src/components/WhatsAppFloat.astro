@@ -1,0 +1,96 @@
+---
+import WhatsAppIcon from './icons/WhatsAppIcon.astro';
+import { whatsappUrl } from '../data/site';
+---
+
+<!--
+  Botão flutuante. Sem JavaScript, fica sempre visível.
+  Com JavaScript, recolhe enquanto uma área que já tem contato do WhatsApp está na tela
+  (hero, seção de contato, rodapé) ou o menu mobile está aberto: assim não cobre o texto
+  de abertura nem o rodapé.
+-->
+<a
+  class="wa-float"
+  href={whatsappUrl()}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Conversar pelo WhatsApp (abre em nova aba)"
+  data-wa-float
+>
+  <WhatsAppIcon size={24} />
+</a>
+
+<script>
+  const button = document.querySelector<HTMLElement>('[data-wa-float]');
+  const targets = document.querySelectorAll('[data-hero], [data-contact], [data-footer]');
+
+  if (button && 'IntersectionObserver' in window) {
+    const visible = new Set<Element>();
+    // visibility: hidden (no CSS) também retira o botão da ordem de tabulação.
+    const update = () => button.toggleAttribute('data-hidden', visible.size > 0);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      });
+      update();
+    });
+    targets.forEach((target) => observer.observe(target));
+  }
+</script>
+
+<style>
+  .wa-float {
+    position: fixed;
+    right: max(var(--space-4), env(safe-area-inset-right));
+    bottom: max(var(--space-4), env(safe-area-inset-bottom));
+    z-index: 30;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    background: var(--petrol);
+    color: var(--sand);
+    border: var(--line) solid var(--sand);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 18px -8px rgb(0 30 32 / 0.45);
+    text-decoration: none;
+    transition:
+      opacity var(--dur) var(--ease),
+      transform var(--dur) var(--ease),
+      background-color var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      visibility 0s linear 0s;
+  }
+
+  .wa-float:hover {
+    background: var(--sand);
+    color: var(--petrol);
+  }
+
+  .wa-float:focus-visible {
+    outline: 2px solid var(--petrol);
+    outline-offset: 3px;
+  }
+
+  .wa-float[data-hidden],
+  :global(html[data-menu-open]) .wa-float {
+    opacity: 0;
+    transform: translateY(0.5rem);
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity var(--dur) var(--ease),
+      transform var(--dur) var(--ease),
+      visibility 0s linear var(--dur);
+  }
+
+  /* Desktop: centralizado na margem lateral, fora da coluna de conteúdo, quando há espaço. */
+  @media (min-width: 64em) {
+    .wa-float {
+      right: max(var(--space-4), calc((100vw - var(--container)) / 4 - 1.75rem));
+      bottom: var(--space-6);
+    }
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+import SectionHead from './SectionHead.astro';
+import { site, maps } from '../data/site';
+---
+
+<section class="section section--ivory localizacao" id="localizacao" aria-labelledby="localizacao-title">
+  <div class="container localizacao__grid">
+    <div>
+      <SectionHead
+        id="localizacao-title"
+        title="Localização e atendimento"
+        lead={`Atendimento presencial no escritório, em ${site.location.label}, ou online, conforme sua preferência.`}
+      />
+
+      <dl class="info-list localizacao__info">
+        <div>
+          <dt class="eyebrow">Endereço</dt>
+          <dd>
+            <address>
+              {site.address.street}<br />
+              {site.address.complement}<br />
+              CEP {site.address.postalCode}, {site.location.label}
+            </address>
+            <a class="text-link localizacao__route" href={maps.directions} target="_blank" rel="noopener noreferrer">
+              Ver rotas no Google Maps<span class="visually-hidden"> (abre em nova aba)</span>
+            </a>
+          </dd>
+        </div>
+        <div>
+          <dt class="eyebrow">Horário</dt>
+          <dd>{site.hours}</dd>
+        </div>
+        <div>
+          <dt class="eyebrow">Modalidades</dt>
+          <dd>{site.modalities}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="localizacao__map">
+      <iframe
+        src={maps.embed}
+        title={`Mapa com a localização do escritório: ${site.address.street}, ${site.location.label}`}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<style>
+  .localizacao__grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .localizacao__info {
+    margin-top: var(--space-6);
+  }
+
+  .localizacao__route {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    margin-top: var(--space-1);
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+  }
+
+  .localizacao__map {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--paper);
+    border: var(--line) solid var(--rule);
+    border-radius: var(--radius);
+  }
+
+  .localizacao__map iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  @media (min-width: 64em) {
+    .localizacao__grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--space-8);
+      align-items: stretch;
+    }
+
+    .localizacao__map {
+      aspect-ratio: auto;
+      height: 100%;
+      min-height: 28rem;
+    }
+  }
+</style>

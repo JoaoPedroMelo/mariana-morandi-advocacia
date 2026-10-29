@@ -1,0 +1,112 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import portrait from '../assets/photos/mariana-oab.jpeg';
+import { site } from '../data/site';
+
+/* REVISÃO: texto institucional sujeito à aprovação da advogada. */
+---
+
+<section class="section section--ivory sobre" id="sobre" aria-labelledby="sobre-title">
+  <div class="container sobre__grid">
+    <figure class="sobre__photo">
+      <Picture
+        src={portrait}
+        formats={['avif', 'webp']}
+        widths={[320, 480, 640, 960]}
+        sizes="(min-width: 64em) 30rem, (min-width: 40em) 22rem, 72vw"
+        alt={`${site.lawyer.name} sorrindo e mostrando a carteira de identidade de advogada da OAB.`}
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+
+    <div class="sobre__copy">
+      <SectionHead id="sobre-title" eyebrow="Quem vai te atender" title={`Prazer, sou ${site.lawyer.shortName}.`} />
+
+      <div class="sobre__text">
+        <p>
+          Sou {site.lawyer.name}, advogada com atuação em {site.practice}. Sei que questões relacionadas ao
+          INSS podem surgir em momentos importantes e delicados da vida, seja diante de uma doença, da perda
+          de alguém querido ou da chegada da aposentadoria.
+        </p>
+        <p>
+          Meu compromisso é oferecer orientação jurídica clara e individualizada, explicando cada etapa de
+          forma simples para que você compreenda seus direitos, conheça suas possibilidades e tome decisões
+          com mais segurança.
+        </p>
+      </div>
+
+      <dl class="info-list sobre__facts">
+        <div>
+          <dt class="eyebrow">Inscrição profissional</dt>
+          <dd>{site.oab.label}</dd>
+        </div>
+        <div>
+          <dt class="eyebrow">Formação</dt>
+          <dd>{site.education.degree} pela {site.education.institution}, em {site.education.city}</dd>
+        </div>
+        <div>
+          <dt class="eyebrow">Atendimento</dt>
+          <dd>{site.modalities}, em {site.location.label}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Mesma disposição da seção Localização: duas colunas alinhadas no topo e na base */
+  .sobre__grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  /* Mobile: foto centralizada. No desktop ocupa a coluna inteira (width: 100%). */
+  .sobre__photo {
+    justify-self: center;
+    width: min(72vw, 22rem);
+  }
+
+  /* Mobile: proporção do arquivo original (3:4), foto inteira */
+  .sobre__photo :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+
+  .sobre__text {
+    display: grid;
+    gap: var(--space-4);
+    max-width: var(--measure);
+    margin-top: var(--space-5);
+  }
+
+  .sobre__facts {
+    margin-top: var(--space-6);
+  }
+
+  @media (min-width: 64em) {
+    .sobre__grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--space-8);
+      align-items: stretch;
+    }
+
+    /* Desktop: a foto acompanha a altura do texto, como o mapa na Localização */
+    .sobre__photo,
+    .sobre__photo :global(picture) {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .sobre__photo :global(img) {
+      height: 100%;
+      min-height: 28rem;
+      aspect-ratio: auto;
+      object-position: 50% 45%;
+    }
+  }
+</style>

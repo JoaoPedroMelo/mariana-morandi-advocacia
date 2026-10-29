@@ -1,0 +1,125 @@
+---
+import SectionHead from './SectionHead.astro';
+import { planejamento } from '../data/planejamento';
+---
+
+<section class="section planejamento" id="planejamento" aria-labelledby="planejamento-title">
+  <div class="container">
+    <SectionHead
+      id="planejamento-title"
+      eyebrow={planejamento.eyebrow}
+      title={planejamento.title}
+      lead={planejamento.lead}
+      layout="split"
+    />
+
+    <div class="planejamento__why">
+      <h3>{planejamento.reasonsTitle}</h3>
+      <ol role="list" class="planejamento__reasons">
+        {
+          planejamento.reasons.map((reason, index) => (
+            <li>
+              <span class="eyebrow" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <h4>{reason.title}</h4>
+              <p>{reason.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <div class="planejamento__when">
+      <h3>{planejamento.whenTitle}</h3>
+      <div class="planejamento__when-copy">
+        <p>{planejamento.whenText}</p>
+        <p class="planejamento__closing">{planejamento.closing}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .planejamento h3 {
+    font-size: var(--fs-xl);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+
+  .planejamento__why {
+    margin-top: var(--space-8);
+  }
+
+  .planejamento__reasons {
+    display: grid;
+    margin-top: var(--space-6);
+    border-top: var(--line) solid var(--rule-strong);
+  }
+
+  .planejamento__reasons > li {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+    padding-block: var(--space-5);
+    border-bottom: var(--line) solid var(--rule);
+  }
+
+  .planejamento__reasons h4 {
+    font-size: var(--fs-lg);
+    line-height: 1.3;
+  }
+
+  .planejamento__reasons p {
+    max-width: 36rem;
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+  }
+
+  /* Mesmo card com borda esquerda usado na Atuação */
+  .planejamento__when {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+    padding: var(--space-6) var(--space-5);
+    background: var(--ivory);
+    border-left: 2px solid var(--petrol);
+    border-radius: var(--radius);
+  }
+
+  .planejamento__when-copy {
+    display: grid;
+    gap: var(--space-5);
+    max-width: var(--measure);
+    color: var(--text-muted);
+  }
+
+  .planejamento__closing {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  @media (min-width: 48em) {
+    .planejamento__reasons {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-7);
+    }
+
+    .planejamento__when {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--space-7);
+      padding: var(--space-7) var(--space-6);
+    }
+  }
+
+  @media (min-width: 64em) {
+    .planejamento__reasons {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      column-gap: var(--space-6);
+    }
+  }
+</style>

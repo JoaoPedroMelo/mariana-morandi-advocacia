@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Atuacao from '../components/Atuacao.astro';
+import Declaracao from '../components/Declaracao.astro';
+import Planejamento from '../components/Planejamento.astro';
+import Sobre from '../components/Sobre.astro';
+import Duvidas from '../components/Duvidas.astro';
+import Localizacao from '../components/Localizacao.astro';
+import Contato from '../components/Contato.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+---
+
+<BaseLayout>
+  <Header />
+  <main id="conteudo" tabindex="-1">
+    <Hero />
+    <Declaracao />
+    <Atuacao />
+    <Planejamento />
+    <Sobre />
+    <Duvidas />
+    <Localizacao />
+    <Contato />
+  </main>
+  <Footer />
+  <WhatsAppFloat />
+</BaseLayout>

@@ -1,0 +1,86 @@
+/* Design system — Mariana Morandi Advocacia
+   Estrutura tipográfica e divisões inspiradas na referência indicada pela cliente;
+   cores da marca. Contrastes documentados em docs/ART_DIRECTION.md */
+
+:root {
+  /* Cores da marca */
+  --petrol: #002b2e;
+  --petrol-hover: #0d4044;
+  --petrol-deep: #001e20;
+  --petrol-line: #1d4a4c;
+  --sand: #d0aa85;
+  --sand-hover: #dcbd9e;
+  --bronze: #7b5a39;
+
+  /* Superfícies claras (alternadas entre seções) */
+  --paper: #fbf9f6;
+  --ivory: #f6f2ec;
+
+  /* Papéis semânticos — superfície clara */
+  --text: var(--petrol);
+  --text-body: #34494b;
+  --text-muted: #45585a;
+  --rule: #e2d9cc;
+  --rule-strong: #cdbfae;
+  --accent-text: var(--bronze);
+
+  /* Papéis semânticos — superfície escura */
+  --dark-text: #e9e2d8;
+  --dark-text-muted: #a7b6b3;
+  --dark-rule: var(--petrol-line);
+
+  /* Tipografia */
+  --font-display: 'Spectral', Georgia, 'Times New Roman', serif;
+  --font-body: 'Public Sans Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --fs-label: 0.75rem;                                   /* 12 — rótulos mono */
+  --fs-xs: 0.875rem;                                     /* 14 */
+  --fs-sm: 0.9375rem;                                    /* 15 */
+  --fs-base: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);   /* 17–18 */
+  --fs-md: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);  /* 18–21 */
+  --fs-lg: clamp(1.375rem, 1.25rem + 0.5vw, 1.5rem);     /* 22–24 */
+  --fs-xl: clamp(1.625rem, 1.4rem + 0.9vw, 1.875rem);    /* 26–30 */
+  --fs-2xl: clamp(1.875rem, 1.5rem + 1.5vw, 2.5rem);     /* 30–40 */
+  --fs-display: clamp(2.125rem, 1.3rem + 4.2vw, 4rem);   /* 34–64 */
+
+  --lh-tight: 1.1;
+  --lh-heading: 1.2;
+  --lh-body: 1.65;
+
+  /* Espaçamento (base 8) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --section-y: clamp(4rem, 2.5rem + 5.5vw, 7.5rem);
+
+  /* Grid */
+  --container: 74rem; /* 1184 */
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --measure: 38rem;
+
+  /* Forma */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --line: 1px;
+  --tap: 3rem; /* 48px */
+
+  /* Movimento */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 180ms;
+
+  --header-h: 4.25rem;
+}
+
+/* Mesmo ponto em que o header passa para o layout de desktop */
+@media (min-width: 72em) {
+  :root {
+    --header-h: 4.75rem;
+  }
+}

@@ -1,0 +1,108 @@
+---
+/**
+ * Botão-link. Texto, com ícone opcional antes dele (só na seção de contato).
+ * variant: "solid" ou "outline" · tone: "light" (superfície clara) ou "dark" (verde-petróleo).
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'a'> {
+  href: string;
+  variant?: 'solid' | 'outline';
+  tone?: 'light' | 'dark';
+  size?: 'md' | 'sm';
+  external?: boolean;
+}
+
+const {
+  href,
+  variant = 'solid',
+  tone = 'light',
+  size = 'md',
+  external = false,
+  class: className,
+  ...rest
+} = Astro.props;
+const externalAttrs = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+
+<a
+  href={href}
+  class:list={['button', `button--${variant}-${tone}`, size === 'sm' && 'button--sm', className]}
+  {...externalAttrs}
+  {...rest}
+>
+  <slot />
+  {external && <span class="visually-hidden"> (abre em nova aba)</span>}
+</a>
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 3.25rem;
+    padding: var(--space-3) var(--space-5);
+    border: var(--line) solid transparent;
+    border-radius: var(--radius);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    line-height: 1.25;
+    text-align: center;
+    text-decoration: none;
+    transition:
+      background-color var(--dur) var(--ease),
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  .button--sm {
+    min-height: var(--tap);
+    padding-inline: var(--space-5);
+  }
+
+  .button:active {
+    transform: translateY(1px);
+  }
+
+  .button--solid-light {
+    background: var(--petrol);
+    border-color: var(--petrol);
+    color: var(--paper);
+  }
+
+  .button--solid-light:hover {
+    background: var(--petrol-hover);
+    border-color: var(--petrol-hover);
+  }
+
+  .button--outline-light {
+    border-color: var(--rule-strong);
+    color: var(--petrol);
+  }
+
+  .button--outline-light:hover {
+    border-color: var(--petrol);
+    background: var(--ivory);
+  }
+
+  .button--solid-dark {
+    background: var(--sand);
+    border-color: var(--sand);
+    color: var(--petrol);
+  }
+
+  .button--solid-dark:hover {
+    background: var(--sand-hover);
+    border-color: var(--sand-hover);
+  }
+
+  .button--outline-dark {
+    border-color: rgb(233 226 216 / 0.45);
+    color: var(--paper);
+  }
+
+  .button--outline-dark:hover {
+    border-color: var(--sand);
+  }
+</style>

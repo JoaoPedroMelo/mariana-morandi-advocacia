@@ -1,0 +1,31 @@
+---
+/**
+ * Símbolo da marca (derivado transparente do arquivo original — ver scripts/prepare-assets.mjs).
+ * Proporção preservada: 546 × 674.
+ */
+import { Image } from 'astro:assets';
+import markPetrol from '../assets/brand/logo-mark-petrol.png';
+import markSand from '../assets/brand/logo-mark-sand.png';
+
+interface Props {
+  tone?: 'petrol' | 'sand';
+  height: number;
+  class?: string;
+  alt?: string;
+}
+
+const { tone = 'petrol', height, class: className, alt = '' } = Astro.props;
+const src = tone === 'petrol' ? markPetrol : markSand;
+const width = Math.round((height * src.width) / src.height);
+---
+
+<Image
+  src={src}
+  alt={alt}
+  width={width}
+  height={height}
+  densities={[1, 2]}
+  format="webp"
+  class={className}
+  loading="eager"
+/>

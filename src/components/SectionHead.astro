@@ -1,0 +1,86 @@
+---
+/**
+ * Abertura de seção: traço curto, rótulo opcional, título (h2) e texto de apoio opcional.
+ * layout="split": no desktop ocupa a linha inteira, com o título à esquerda (5/12)
+ * e o texto de apoio à direita (7/12), na mesma divisão das seções de duas colunas.
+ */
+interface Props {
+  id: string;
+  title: string;
+  eyebrow?: string;
+  lead?: string;
+  align?: 'start' | 'center';
+  layout?: 'stack' | 'split';
+  class?: string;
+}
+
+const { id, title, eyebrow, lead, align = 'start', layout = 'stack', class: className } = Astro.props;
+---
+
+<header
+  class:list={[
+    'section-head',
+    align === 'center' && 'section-head--center',
+    layout === 'split' && 'section-head--split',
+    className,
+  ]}
+>
+  <div>
+    <span class="rule-short" aria-hidden="true"></span>
+    {eyebrow && <p class="eyebrow section-head__eyebrow">{eyebrow}</p>}
+    <h2 id={id}>{title}</h2>
+  </div>
+  {lead && <p class="section-head__lead">{lead}</p>}
+  <slot />
+</header>
+
+<style>
+  .section-head {
+    max-width: 44rem;
+  }
+
+  .section-head__eyebrow {
+    margin-bottom: var(--space-3);
+  }
+
+  .section-head h2 {
+    font-size: var(--fs-2xl);
+    letter-spacing: -0.012em;
+  }
+
+  .section-head__lead {
+    max-width: var(--measure);
+    margin-top: var(--space-5);
+    color: var(--text-muted);
+  }
+
+  .section-head--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .section-head--center .rule-short,
+  .section-head--center .section-head__lead {
+    margin-inline: auto;
+  }
+
+  @media (min-width: 64em) {
+    .section-head--split {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--space-8);
+      align-items: end;
+      max-width: none;
+    }
+
+    /* A coluna de 7/12 (~41rem) já limita a linha a um comprimento confortável */
+    .section-head--split .section-head__lead {
+      max-width: none;
+      margin-top: 0;
+    }
+  }
+
+  :global(.on-dark) .section-head__lead {
+    color: var(--dark-text-muted);
+  }
+</style>

@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import displayFont from '@fontsource/spectral/files/spectral-latin-300-normal.woff2?url';
+import bodyFont from '@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2?url';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.seo.title, description = site.seo.description } = Astro.props;
+
+// Sem domínio definido (SITE_URL), não emitimos URL canônica nem URLs absolutas inventadas.
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const ogImage = Astro.site ? new URL(site.seo.ogImage, Astro.site).href : site.seo.ogImage;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'LegalService',
+  name: site.brand,
+  description,
+  ...(canonical && { url: canonical, image: ogImage }),
+  telephone: site.contact.whatsapp.international,
+  email: site.contact.email,
+  areaServed: { '@type': 'City', name: site.location.city },
+  // Horário sem dias da semana confirmados: openingHoursSpecification omitido de propósito.
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${site.address.street}, ${site.address.complement}`,
+    postalCode: site.address.postalCode,
+    addressLocality: site.location.city,
+    addressRegion: site.location.state,
+    addressCountry: 'BR',
+  },
+  knowsAbout: site.practice,
+  sameAs: [site.contact.instagram.url],
+  employee: {
+    '@type': 'Person',
+    name: site.lawyer.name,
+    jobTitle: site.lawyer.role,
+    alumniOf: { '@type': 'CollegeOrUniversity', name: site.education.institution },
+  },
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#002B2E" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={site.seo.locale} />
+    <meta property="og:site_name" content={site.brand} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={site.seo.ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <slot />
+  </body>
+</html>

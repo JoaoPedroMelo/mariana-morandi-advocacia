@@ -1,0 +1,73 @@
+---
+import Button from './Button.astro';
+import WhatsAppIcon from './icons/WhatsAppIcon.astro';
+import MailIcon from './icons/MailIcon.astro';
+import InstagramIcon from './icons/InstagramIcon.astro';
+import { site, whatsappUrl } from '../data/site';
+---
+
+<section class="contato on-dark" id="contato" aria-labelledby="contato-title" data-contact>
+  <div class="container contato__inner">
+    <span class="rule-short" aria-hidden="true"></span>
+    <h2 id="contato-title">Contato</h2>
+    <p class="contato__text">
+      Para conversar sobre a sua situação previdenciária, fale pelo WhatsApp ou envie um e-mail. O
+      atendimento acontece {site.modalities.toLowerCase()}, em {site.location.label}.
+    </p>
+    <div class="contato__actions">
+      <Button href={whatsappUrl()} tone="dark" external>
+        <WhatsAppIcon size={18} />
+        Conversar pelo WhatsApp
+      </Button>
+      <Button href={`mailto:${site.contact.email}`} tone="dark" variant="outline">
+        <MailIcon size={18} />
+        Enviar e-mail
+      </Button>
+      <Button href={site.contact.instagram.url} tone="dark" variant="outline" external>
+        <InstagramIcon size={18} />
+        Instagram
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contato {
+    padding-block: var(--section-y);
+  }
+
+  .contato__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .contato h2 {
+    font-size: var(--fs-2xl);
+    letter-spacing: -0.012em;
+  }
+
+  .contato__text {
+    max-width: 36rem;
+    margin-top: var(--space-5);
+    color: var(--dark-text-muted);
+  }
+
+  /* Mobile: botões empilhados na mesma largura. A partir de 40em: lado a lado, centralizados. */
+  .contato__actions {
+    display: grid;
+    gap: var(--space-3);
+    width: min(100%, 22rem);
+    margin-top: var(--space-7);
+  }
+
+  @media (min-width: 40em) {
+    .contato__actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: auto;
+    }
+  }
+</style>

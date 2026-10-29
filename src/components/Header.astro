@@ -1,0 +1,291 @@
+---
+import BrandMark from './BrandMark.astro';
+import Button from './Button.astro';
+import { site, nav, whatsappUrl } from '../data/site';
+---
+
+<header class="header" data-header>
+  <div class="container header__bar">
+    <a class="header__brand" href="#inicio" aria-label={`${site.brand}, voltar ao início`}>
+      <BrandMark tone="petrol" height={44} class="header__mark" />
+      <span class="header__name" aria-hidden="true">
+        <span class="header__name-main">{site.lawyer.shortName}</span>
+        <span class="header__name-sub">Advocacia</span>
+      </span>
+    </a>
+
+    <nav class="header__nav" aria-label="Principal">
+      <ul role="list" class="header__links">
+        {nav.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <Button href={whatsappUrl()} external size="sm" class="header__cta">
+      Conversar pelo WhatsApp
+    </Button>
+
+    <button
+      class="header__toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+      data-menu-toggle
+    >
+      <span class="header__toggle-label" data-menu-label>Menu</span>
+      <span class="header__toggle-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div class="menu" id="menu-mobile" data-menu hidden>
+    <nav class="container" aria-label="Menu">
+      <ul role="list" class="menu__links">
+        {nav.map((item) => (
+          <li>
+            <a href={item.href} data-menu-link>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+      <div class="menu__contact">
+        <Button href={whatsappUrl()} external data-menu-link>Conversar pelo WhatsApp</Button>
+        <p>{site.location.label}. {site.hours}.</p>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const label = document.querySelector<HTMLElement>('[data-menu-label]');
+  const desktop = window.matchMedia('(min-width: 72em)');
+
+  function setOpen(open: boolean) {
+    if (!toggle || !menu) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.hidden = !open;
+    document.documentElement.toggleAttribute('data-menu-open', open);
+    if (label) label.textContent = open ? 'Fechar' : 'Menu';
+  }
+
+  toggle?.addEventListener('click', () => {
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  menu?.querySelectorAll('[data-menu-link]').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
+  desktop.addEventListener('change', (event) => {
+    if (event.matches) setOpen(false);
+  });
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--paper);
+    border-bottom: var(--line) solid var(--rule);
+  }
+
+  .header__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    min-height: var(--header-h);
+  }
+
+  .header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-right: auto;
+    color: var(--petrol);
+    text-decoration: none;
+  }
+
+  .header__brand :global(.header__mark) {
+    width: auto;
+    height: 2.25rem;
+  }
+
+  .header__name {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .header__name-main {
+    font-family: var(--font-display);
+    font-size: clamp(1.1875rem, 1rem + 0.9vw, 1.375rem);
+    font-weight: 400;
+  }
+
+  .header__name-sub {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+
+  .header__nav,
+  .header__bar > :global(.header__cta) {
+    display: none;
+  }
+
+  /* Botão do menu mobile */
+  .header__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: var(--tap);
+    min-width: var(--tap);
+    padding: 0 var(--space-2) 0 var(--space-3);
+    margin-right: calc(var(--space-2) * -1);
+    background: none;
+    border: 0;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .header__toggle-icon {
+    position: relative;
+    width: 1.375rem;
+    height: 0.75rem;
+  }
+
+  .header__toggle-icon::before,
+  .header__toggle-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform var(--dur) var(--ease), top var(--dur) var(--ease);
+  }
+
+  .header__toggle-icon::before {
+    top: 0;
+  }
+
+  .header__toggle-icon::after {
+    top: calc(100% - 1.5px);
+  }
+
+  .header__toggle[aria-expanded='true'] .header__toggle-icon::before {
+    top: calc(50% - 0.75px);
+    transform: rotate(45deg);
+  }
+
+  .header__toggle[aria-expanded='true'] .header__toggle-icon::after {
+    top: calc(50% - 0.75px);
+    transform: rotate(-45deg);
+  }
+
+  @media (max-width: 22.4em) {
+    .header__bar {
+      gap: var(--space-3);
+    }
+
+    .header__toggle-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  }
+
+  /* Painel mobile */
+  .menu {
+    border-top: var(--line) solid var(--rule);
+    background: var(--paper);
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+  }
+
+  .menu__links {
+    padding-block: var(--space-3);
+  }
+
+  .menu__links a {
+    display: flex;
+    align-items: center;
+    min-height: 3.5rem;
+    border-bottom: var(--line) solid var(--rule);
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    color: var(--petrol);
+    text-decoration: none;
+  }
+
+  .menu__contact {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+    padding-block: var(--space-5) var(--space-6);
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+  }
+
+  /* Desktop: a partir de 72em cabem marca, 6 links e o botão numa linha */
+  @media (min-width: 72em) {
+    .header__toggle,
+    .menu {
+      display: none;
+    }
+
+    .header__brand :global(.header__mark) {
+      height: 2.5rem;
+    }
+
+    .header__nav {
+      display: block;
+      margin-right: auto;
+    }
+
+    .header__links {
+      display: flex;
+      gap: var(--space-1);
+    }
+
+    .header__links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding-inline: var(--space-3);
+      font-size: var(--fs-sm);
+      color: var(--petrol);
+      text-decoration: none;
+      text-underline-offset: 0.3em;
+    }
+
+    .header__links a:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+    }
+
+    .header__bar > :global(.header__cta) {
+      display: inline-flex;
+    }
+  }
+</style>
